@@ -1,4 +1,5 @@
 import syncStreams from '@/app/lib/syncStreams'
+import { NextResponse } from 'next/server'
 
 export async function GET() {
   const client = process.env.CLIENT_ID
@@ -8,9 +9,11 @@ export async function GET() {
     try {
       const streams = await syncStreams(client, secret)
 
-      return Response.json(streams)
+      return NextResponse.json({ streams: streams }, { status: 200 })
     } catch (error) {
       console.log(`Error fetching stream data with error: ${error}`)
+
+      return NextResponse.json({ error: error }, { status: 500 })
     }
   }
 }
